@@ -46,7 +46,7 @@ const Checkout = () => {
   }, []);
 
   useEffect(() => {
-    const getPaymentList = async () => {
+    const getPaymentList = async () =>  {
       try {
         const params = {};
         const response = await furnitureAPI.getPaymentList(params);

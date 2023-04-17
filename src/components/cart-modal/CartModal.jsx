@@ -79,9 +79,9 @@ const CartModal = ({ show, onClose }) => {
               </div>
               <div className="btn-wrap">
                 {" "}
-                <a onClick={(e) => handleCheckout(e)} className="btn-2">
+                <button onClick={(e) => handleCheckout(e)} disabled={cartItems.length === 0} className="btn-2">
                   <span>proceed to checkout</span>
-                </a>
+                </button>
               </div>
             </div>
             <div className="button-close" onClick={onClose} />

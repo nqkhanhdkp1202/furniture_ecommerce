@@ -38,7 +38,8 @@ const LoginModal = ({ show, onClose, onOpenSignUp }) => {
       const response = await authAPI.login({ userName, password }, params);
       if (response.data) {
         localStorage.setItem("accessToken", response.data.accessToken);
-        const user = await userAPI.getInfoUser(response.data.accessToken);
+        const user = await userAPI.getInfoUser(response.data.accessToken,{params});
+        console.log(user);
         if (user) {
           localStorage.setItem("user", JSON.stringify(user));
           setUser(user)

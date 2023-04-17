@@ -1,19 +1,16 @@
-import { useState } from 'react'
-import Header from './components/header/Header'
-import { Router, useRoutes } from 'react-router-dom'
-
-import router from './config/Routes'
+import { useRoutes } from "react-router-dom";
+import { CartProvider, CartContext } from "./context/CartContext";
+import router from "./config/Routes";
+import { UserProvider } from "./context/UserContext";
 
 function App() {
   const element = useRoutes(router);
 
   return (
-    <>
-      {
-        element
-      }
-    </>
-  )
+    <UserProvider>
+      <CartProvider>{element}</CartProvider>
+    </UserProvider>
+  );
 }
 
-export default App
+export default App;

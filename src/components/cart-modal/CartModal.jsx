@@ -1,44 +1,35 @@
-import React, { useEffect, useState } from "react";
-import PropsType from "prop-types";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import PropsType, { element } from "prop-types";
+import { Link, useNavigate } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
+import QuantityInput from "../quantity-input/QuantityInput";
+import { UserContext } from "../../context/UserContext";
+import LoginModal from "../login-modal/LoginModal";
 
 const CartModal = ({ show, onClose }) => {
-  const [cartItems, setCartItems] = useState([
-    {
-        name: "CHAIR WITH OPEN SPACE",
-        desc: "Lorem ipsum dolor sit amet, cons adipisicing elit",
-        price: 572,
-        quantity: 1,
-    },
-  ]);
-
-  const addToCart = (item) => {
-    setCartItems([...cartItems, item]);
-  };
-
-  const updateQuantity= (index, newQuantity) => {
-    const updatedItems = [...cartItems];
-    updatedItems[index].quantity = newQuantity;
-    setCartItems(updatedItems);
+  const {
+    cartItems,
+    removeFromCart,
+    calculateTotal,
+    handleQuantityChange,
+    increaseQuantity,
+    decreaseQuantity,
+  } = useContext(CartContext);
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+  const [showLogin, setShowLogin] = useState(false);
+  const handleCheckout = (e) => {
+    if(Object.keys(user).length === 0){
+    setShowLogin(true);
+    }
+    else{
+      navigate("/checkout")
+    }
   }
 
-  const removeFromCart = (item) =>{
-    const updatedItems = [...cartItems];
-    updatedItems.splice(index, 1);
-    setCartItems(updatedItems);
+  const handleCloseLogin = () => {
+    setShowLogin(false)
   }
-
-//   useEffect(() => {
-//     const cartItemsFromStorage = localStorage.getItem('cartItems');
-//     if (cartItemsFromStorage) {
-//       setCartItems(JSON.parse(cartItemsFromStorage));
-//     }
-//   }, []);
-
-//   useEffect(() => {
-//     localStorage.setItem('cartItems', JSON.stringify(cartItems));
-//   }, [cartItems]);
-
 
   return (
     <>
@@ -52,52 +43,52 @@ const CartModal = ({ show, onClose }) => {
           <div className="layer-close" />
           <div className="popup-container size-2 right">
             <div className="popup-align">
-                {
-                    cartItems.map((e,i) => (
-                        <div className="basket-item" key={i}>
-                        <div className="basket-item-close" onClick={(e) => removeFromCart(e)} />
-                        <a href="#" className="img-hover-2">
-                          <img src="img/shop/item-1-sm.jpg" alt="" />
+              <div className="cart-wrapper">
+                {cartItems.map((e, i) => (
+                  <div className="basket-item" key={i}>
+                    <div
+                      className="basket-item-close"
+                      onClick={() => removeFromCart(e.ID)}
+                    />
+                    <a href="#" className="img-hover-2">
+                      <img src={e.Image} alt="" />
+                    </a>
+                    <div className="description">
+                      <article>
+                        <a href="#">
+                          <h6 className="h6 hover-1">{e.DisplayName}</h6>
                         </a>
-                        <div className="description">
-                          <article>
-                            <a href="#">
-                              <h6 className="h6 hover-1">{e.name}</h6>
-                            </a>
-                            <p>{e.desc}</p>
-                          </article>
-                        </div>
-                        <div className="quantity-wrapper">
-                          <div className="quantity">
-                            <input type="number" defaultValue={e.quantity} onChange={(e) => updateQuantity(e,e.target.value)} />
-                            <i className="fa fa-caret-left" aria-hidden="true" />
-                            <i className="fa fa-caret-right" aria-hidden="true" />
-                          </div>
-                        </div>
-                        <div className="price">
-                          <span>
-                            ${e.price}<sup>00</sup>
-                          </span>
-                        </div>
-                      </div>
-                    ))
-                }
+                        <p>{e.MoreInfo}</p>
+                      </article>
+                    </div>
+                    <QuantityInput
+                      product={e}
+                      quantity={e.quantity}
+                      onQuantityChange={handleQuantityChange}
+                      decreaseQuantity={decreaseQuantity}
+                      increaseQuantity={increaseQuantity}
+                    />
+                    <div className="price">
+                      <span>{e.Price}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
               <div className="total-basket-price price">
-                total price:{" "}
-                <span>
-                  $1139<sup>00</sup>
-                </span>
+                total price: <span>{calculateTotal(cartItems) + " $"}</span>
               </div>
               <div className="btn-wrap">
-                <Link to="/checkout" className="btn-2">
+                {" "}
+                <a onClick={(e) => handleCheckout(e)} className="btn-2">
                   <span>proceed to checkout</span>
-                </Link>
+                </a>
               </div>
             </div>
             <div className="button-close" onClick={onClose} />
           </div>
         </div>
       </div>
+      <LoginModal show={showLogin} onClose={handleCloseLogin} />
     </>
   );
 };

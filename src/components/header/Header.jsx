@@ -1,21 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import CartModal from "../cart-modal/CartModal";
 import MobileMenu from "../mobile-menu/MobileMenu";
 import LoginModal from "../login-modal/LoginModal";
 import SignupModal from "../signup-modal/SignupModal";
+import { CartContext } from "../../context/CartContext";
+import { UserContext } from "../../context/UserContext";
 
 const Header = () => {
+  const { cartItems } = useContext(CartContext);
+  const { user, setUser } = useContext(UserContext);
+  const [showCart, setShowCart] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false)
 
-    const location = useLocation();
-    useEffect(() => {
-      setShowCart(false);
-      setShowMenu(false);
-      setShowLogin(false);
-    }, [location]);
 
+  const location = useLocation();
+  useEffect(() => {
+    setShowCart(false);
+    setShowMenu(false);
+    setShowLogin(false);
+    setShowDropdown(false);
+  }, [location]);
 
+  const navigate = useNavigate();
+  
   const headerNav = [
     {
       display: "Home",
@@ -26,8 +37,8 @@ const Header = () => {
       path: "/shop",
     },
     {
-      display: "Checkout",
-      path: "/checkout",
+      display: "About Us",
+      path: "/about",
     },
     {
       display: "Contact",
@@ -39,42 +50,48 @@ const Header = () => {
   const headerRef = useRef(null);
   const active = headerNav.findIndex((e) => e.path === pathname);
 
-  const [showCart, setShowCart] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
-
   const handleShowCart = () => {
-    if(showLogin){
+    if (showLogin) {
       setShowLogin(false);
     }
-    setShowCart(!showCart)
-  }
+    setShowCart(!showCart);
+  };
 
   const handleCloseCart = () => {
-    setShowCart(false)
-  }
+    setShowCart(false);
+  };
 
   const handleShowLogin = () => {
-    if(showCart){
-      setShowCart(false)
+    if (showCart) {
+      setShowCart(false);
     }
-    setShowLogin(!showLogin)
-  }
+    setShowLogin(!showLogin);
+  };
 
   const handleCloseLogin = () => {
-    setShowLogin(false)
-  }
-
+    setShowLogin(false);
+  };
 
   const handleShowMenu = () => {
-    setShowMenu(true)
-  }
+    setShowMenu(true);
+  };
 
   const handleCloseMenu = () => {
-    setShowMenu(false)
+    setShowMenu(false);
+  };
+
+  const handleDropDown = () => {
+    setShowDropdown(!showDropdown)
+  }
+  const handleLogOut = () => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('user')
+    setUser({});
+    setShowDropdown(false);
+    navigate("/")
   }
 
-  
+
   return (
     <>
       {/* HEADER */}
@@ -97,16 +114,52 @@ const Header = () => {
                 ))}
               </ul>
               {/* basket */}
-              <div className={`basket open-popup ${showCart ? "active" : ''}`} data-rel={1} onClick={handleShowCart}>
+              <div
+                className={`basket open-popup ${showCart ? "active" : ""}`}
+                data-rel={1}
+                onClick={handleShowCart}
+              >
                 <div className="img-wrapper">
-                  <span>1</span>
+                  <span>{cartItems.length}</span>
                 </div>
               </div>
               {/* login */}
               <div className="login-wrapper">
-                <div className="login hover-1 open-popup"  onClick={handleShowLogin} data-rel={2}>
-                  Log in / Sing up
-                </div>
+                {Object.keys(user).length !== 0  ? (
+                  <>
+                    <div class="login login-account" onClick={handleDropDown}>
+                      <img src="/src/assets/img/account.png" alt="" />
+                      <span>Hello {user.DisplayName}</span>
+                    </div>
+                    <div className="dropdown-container" style={{display: `${showDropdown ? "block" : "none"}`}}>
+                      <ul>
+                        <li>
+                          My Profile
+                        </li>
+                        <hr />
+                        <li>
+                          My Orders
+                        </li>
+                        <hr />
+                        <li>
+                          My Address
+                        </li>
+                        <hr />
+                        <li onClick={handleLogOut}>
+                          Logout
+                        </li>
+                      </ul>
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className="login hover-1 open-popup"
+                    onClick={handleShowLogin}
+                    data-rel={2}
+                  >
+                    Log in / Sing up
+                  </div>
+                )}
               </div>
               <div className="hamburger-icon" onClick={handleShowMenu}>
                 <span />
@@ -120,8 +173,8 @@ const Header = () => {
       {/* HEADER */}
       <MobileMenu show={showMenu} onClose={handleCloseMenu} />
       <LoginModal show={showLogin} onClose={handleCloseLogin} />
-      <SignupModal/>
-      <CartModal show={showCart} onClose={handleCloseCart}/>
+      <SignupModal />
+      <CartModal show={showCart} onClose={handleCloseCart} />
     </>
   );
 };

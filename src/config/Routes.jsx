@@ -1,7 +1,10 @@
+import { element } from 'prop-types';
 import React from 'react'
 import MainLayout from '../layouts/MainLayouts';
+import About from '../pages/About';
 import Checkout from '../pages/Checkout';
 import Contact from '../pages/Contact';
+import Detail from '../pages/Detail';
 import Home from '../pages/Home';
 import Shop from '../pages/Shop'
 
@@ -15,7 +18,15 @@ const router = [
             },
             {
                 path: '/shop',
-                element: <Shop/>
+                element: <Shop/>,
+            },
+            {
+                path: '/shop/:id',
+                element: <Detail/>
+            },
+            {
+                path: '/about',
+                element: <About/>
             },
             {
                 path: '/checkout',

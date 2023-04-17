@@ -1,11 +1,74 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import CartModal from "../cart-modal/CartModal";
+import LoginModal from "../login-modal/LoginModal";
+import SignupModal from "../signup-modal/SignupModal";
 
-const MobileMenu = ({show, onClose}) => {
+const MobileMenu = ({ show, onClose }) => {
+  const headerNav = [
+    {
+      display: "Home",
+      path: "/",
+    },
+    {
+      display: "Products",
+      path: "/shop",
+    },
+    {
+      display: "About Us",
+      path: "/about",
+    },
+    {
+      display: "Contact",
+      path: "/contact",
+    },
+  ];
+
+  const { pathname } = useLocation();
+  const headerRef = useRef(null);
+  const active = headerNav.findIndex((e) => e.path === pathname);
+
+  const [showCart, setShowCart] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+
+  const handleShowCart = () => {
+    if (showLogin) {
+      setShowLogin(false);
+    }
+    setShowCart(!showCart);
+  };
+
+  const handleCloseCart = () => {
+    setShowCart(false);
+  };
+
+  const handleShowLogin = () => {
+    if (showCart) {
+      setShowCart(false);
+    }
+    setShowLogin(!showLogin);
+  };
+
+  const handleCloseLogin = () => {
+    setShowLogin(false);
+  };
+
+  const handleShowMenu = () => {
+    setShowMenu(true);
+  };
+
+  const handleCloseMenu = () => {
+    setShowMenu(false);
+  };
+
   return (
     <>
       {/* OVERLAY-MENU */}
-      <div className={`overlay-wrapper ${show ? "active" : ""}`}>
+      <div
+        ref={headerRef}
+        className={`overlay-wrapper ${show ? "active" : ""}`}
+      >
         <div className="overlay-animation" />
         <div className="flex">
           <div className="flex-in">
@@ -18,31 +81,33 @@ const MobileMenu = ({show, onClose}) => {
                   </div>
                   <div className="col-md-2 col-md-offset-5">
                     {/* login */}
-                    <div className="login-wrapper">
-                      <div className="login hover-1 open-popup" data-rel={2}>
+                    <div className="login-wrapper"> 
+                      <div className="login hover-1 open-popup" onClick={handleShowLogin} data-rel={2}>
                         Log in / Sing up
                       </div>
                     </div>
                     {/* basket */}
-                    <div className={`basket open-popup ${show ? "active" : ""}`} data-rel={1}>
+                    <div
+                      className={`basket open-popup ${show ? "active" : ""}`}
+                      data-rel={1}
+                      onClick={handleShowCart}
+                    >
                       <div className="img-wrapper">
                         <img src="img/shop/basket-2.png" alt="" />
                         <span>1</span>
                       </div>
                     </div>
                     <ul>
-                      <li>
-                        <Link to="/">Home</Link>
-                      </li>
-                      <li className="dropdown-plus active">
-                        <Link to="/shop">Products</Link>
-                      </li>
-                      <li>
-                        <Link to="/checkout">Checkout</Link>
-                      </li>
-                      <li>
-                        <Link to="/contact">Contact us</Link>
-                      </li>
+                      {headerNav.map((e, i) => (
+                        <li
+                          key={i}
+                          className={`${i === active ? "active" : ""}`}
+                        >
+                          <Link to={e.path}>
+                            <span>{e.display}</span>
+                          </Link>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -52,6 +117,9 @@ const MobileMenu = ({show, onClose}) => {
         </div>
       </div>
       {/* end OVERLAY-MENU */}
+      <LoginModal show={showLogin} onClose={handleCloseLogin} />
+      <SignupModal />
+      <CartModal show={showCart} onClose={handleCloseCart} />
     </>
   );
 };

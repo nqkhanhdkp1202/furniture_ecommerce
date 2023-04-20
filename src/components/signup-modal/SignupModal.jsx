@@ -15,7 +15,7 @@ const SignupModal = ({ show, onClose }) => {
   const handleRegister = async () => {
     try {
       const params = {};
-      const response = await authAPI.register(data,params);
+      const response = await authAPI.register(data, params);
       if (response.data) {
         setPayment(response.data);
       }

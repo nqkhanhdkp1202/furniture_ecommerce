@@ -50,9 +50,9 @@ const CartModal = ({ show, onClose }) => {
                       className="basket-item-close"
                       onClick={() => removeFromCart(e.ID)}
                     />
-                    <a href="#" className="img-hover-2">
+                    <Link to={`/shop/${e.ID}`} className="img-hover-2">
                       <img src={e.Image} alt="" />
-                    </a>
+                    </Link>
                     <div className="description">
                       <article>
                         <a href="#">

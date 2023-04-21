@@ -129,24 +129,26 @@ const Header = () => {
                   <>
                     <div class="login login-account" onClick={handleDropDown}>
                       <img src="/src/assets/img/account.png" alt="" />
-                      <span>Hello {user.DisplayName}</span>
+                      <span>{user.DisplayName}</span>
                     </div>
                     <div className="dropdown-container" style={{display: `${showDropdown ? "block" : "none"}`}}>
                       <ul>
                         <li>
+                          <Link to="/profile">
                           My Profile
+                          </Link>
                         </li>
                         <hr />
                         <li>
+                        <Link to="/orders">
                           My Orders
-                        </li>
-                        <hr />
-                        <li>
-                          My Address
+                          </Link>
                         </li>
                         <hr />
                         <li onClick={handleLogOut}>
+                          <a>
                           Logout
+                          </a>
                         </li>
                       </ul>
                     </div>

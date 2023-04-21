@@ -1,9 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { furnitureAPI } from "../api/furnitureAPI";
+import Loader from "../components/loader/Loader";
 import ProductList from "../components/product-list/ProductList";
 import SearchModal from "../components/search-modal/SearchModal";
 import Sidebar from "../components/sidebar/Sidebar";
 
 const Shop = () => {
+  const [categories, setCategories] = useState([]);
+  const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    setIsLoading(true);
+    const getProductList = async () => {
+      const params = {};
+      let response = null;
+      response = await furnitureAPI.getProductsList(params);
+      setItems(response.data);
+    };
+    getProductList();
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const getCategoryList = async () => {
+      const params = {};
+      let response = null;
+      response = await furnitureAPI.getCategoryList(params);
+      setCategories(response.data);
+    };
+    getCategoryList();
+    setIsLoading(false);
+  }, []);
 
   return (
     <>
@@ -28,8 +56,14 @@ const Shop = () => {
             </div>
             <div className="empty-space h0-xs" />
             <div className="row">
-              <ProductList />
-              <Sidebar />
+              {isLoading ? (
+                <Loader  width={50} height={50} />
+              ) : (
+                <>
+                  <ProductList items={items} />
+                  <Sidebar categories={categories} />
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -5745,7 +5745,32 @@ _:-ms-fullscreen,
   margin: 0;
 }
 
-.dropdown-container li:hover {
+.dropdown-container a:hover {
   color: #dfcd50;
-} 
+}
 
+.heading-shipping {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.heading-shipping a {
+  cursor: pointer;
+  line-height: 2.5rem;
+  color: #dfcd50;
+  font-size: 1rem;
+  -moz-transition: all 150ms ease-out;
+  -o-transition: all 150ms ease-out;
+  -webkit-transition: all 150ms ease-out;
+  transition: all 150ms ease-out;
+  -ms-transition: all 150ms ease-out;
+}
+
+.heading-shipping a:hover {
+  color: #151515;
+}
+input[disabled] {
+  opacity: 0.4;
+  filter: alpha(opacity=40); /* For IE8 and earlier */
+}

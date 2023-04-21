@@ -6,42 +6,13 @@ import Pagination from "../pagination/Pagination";
 import Loader from "../loader/Loader";
 import SearchModal from "../search-modal/SearchModal";
 
-const ProductList = () => {
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+const ProductList = ({items}) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const originalProducts = [...items];
-
-  useEffect(() => {
-    setIsLoading(true);
-    const getProductList = async () => {
-      const params = {};
-      let response = null;
-      response = await furnitureAPI.getProductsList(params);
-      setItems(response.data);
-    };
-    getProductList();
-    setIsLoading(false);
-  }, []);
-
   const productsPerPage  = 6;
   const totalPages = Math.ceil(items.length / productsPerPage);
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = items.slice(indexOfFirstProduct, indexOfLastProduct);
-
-  useEffect(() => {
-    if (searchTerm === '') {
-      setItems(originalProducts);
-    } else {
-      const filteredProducts = originalProducts.filter(product =>
-        product.DisplayName.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setItems(filteredProducts);
-    }
-  }, [searchTerm])
-  
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -63,10 +34,6 @@ const ProductList = () => {
 
   return (
     <>
-    {
-      isLoading && <Loader />
-    }
-    {/* <SearchModal onSubmit={handleSearch} searchTerm={searchTerm}/> */}
     <div className="empty-space h30-xs" />
       <div className="col-md-9 col-sm-9 pd-x-2">
         <div className="prod-item-wrapper">

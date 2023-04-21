@@ -6,30 +6,30 @@ import QuantityInput from "../components/quantity-input/QuantityInput";
 import { CartContext } from "../context/CartContext";
 
 const Detail = () => {
-  const {id} = useParams();
-  const [detail, setDetail] = useState(null)
+  const { id } = useParams();
+  const [detail, setDetail] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [relatedItems, setRelatedItems] = useState([]);
-  const {addToCart} = useContext(CartContext);
-  
+  const { addToCart } = useContext(CartContext);
+
   useEffect(() => {
     setIsLoading(true);
     const getDetail = async () => {
       const params = {};
       let response = null;
-      response = await furnitureAPI.getDetail(id,params);
+      response = await furnitureAPI.getDetail(id, params);
       setDetail(response.data[0]);
     };
     getDetail();
     setIsLoading(false);
   }, [id]);
-  
+
   useEffect(() => {
     setIsLoading(true);
     const getRelatedItems = async () => {
       const params = {};
       let response = null;
-      response = await furnitureAPI.getRelated(id,params);
+      response = await furnitureAPI.getRelated(id, params);
       setRelatedItems(response.data);
     };
     getRelatedItems();
@@ -37,7 +37,6 @@ const Detail = () => {
   }, [id]);
 
   console.log(relatedItems);
-  
 
   return (
     <div id="content">
@@ -62,131 +61,128 @@ const Detail = () => {
           <div className="row">
             <div className="col-md-12 col-sm-12">
               <div className="detail-item">
-                <div className="row">
-                  <div className="col-md-7">
-                    <img
-                      className="img-main"
-                      src={detail && detail.Image}
-                      alt=""
-                    />
-                    <div className="img-preview">
-                      
+                {detail && (
+                  <div className="row">
+                    <div className="col-md-7">
+                      <img className="img-main" src={detail.Image} alt="" />
+                      <div className="img-preview"></div>
+                      <div className="clear" />
                     </div>
-                    <div className="clear" />
-                  </div>
-                  <div className="col-md-5">
-                    <article className="description">
-                      <h3 className="h3">{detail && detail.DisplayName}</h3>
-                      <ul>
-                        <li>
-                          <span>price:</span>
-                          <span className="price">
-                            {detail && detail.Price} $
-                          </span>
-                        </li>
-                        <li>
-                          <span>Reviews:</span>
-                          <span className="large">26</span>
-                          <span className="star">
-                            <i className="fa fa-star" aria-hidden="true" />
-                            <i className="fa fa-star" aria-hidden="true" />
-                            <i className="fa fa-star" aria-hidden="true" />
-                            <i className="fa fa-star" aria-hidden="true" />
-                            <i className="fa fa-star-o" aria-hidden="true" />
-                          </span>
-                        </li>
-                        <li>
-                          <span>Available:</span>
-                          <span className="large">yes</span>
-                        </li>
-                        <li>
-                          <span>color:</span>
-                          <span className="color">
-                            <span
-                              className="active"
-                              style={{
-                                backgroundColor: "#28252c",
-                                outlineColor: "#28252c",
-                              }}
-                            />
-                            <span
-                              style={{
-                                backgroundColor: "#d2cbc6",
-                                outlineColor: "#d2cbc6",
-                              }}
-                            />
-                            <span
-                              style={{
-                                backgroundColor: "#4e77ab",
-                                outlineColor: "#4e77ab",
-                              }}
-                            />
-                            <span
-                              style={{
-                                backgroundColor: "#c48d8d",
-                                outlineColor: "#c48d8d",
-                              }}
-                            />
-                          </span>
-                        </li>
-                      </ul>
-                      <p>
-                        {detail && detail.shortDesc}
-                      </p>
-                    </article>
-                    <QuantityInput />
-                    <div className="btn-wrap">
-                      <a href="#" className="btn-2" onClick={(e) => addToCart(detail, e)}>
-                        <span>add to cart</span>
-                      </a>
-                    </div>
-                    <div className="btn-wrap">
-                      <a href="#" className="btn-1 border">
-                        <span>add to favourites</span>
-                      </a>
-                    </div>
-                    <div className="follow-wrapper">
-                      <span>share:</span>
-                      <div className="follow">
+                    <div className="col-md-5">
+                      <article className="description">
+                        <h3 className="h3">{detail.DisplayName}</h3>
+                        <ul>
+                          <li>
+                            <span>price:</span>
+                            <span className="price">{detail.Price} $</span>
+                          </li>
+                          <li>
+                            <span>Reviews:</span>
+                            <span className="large">26</span>
+                            <span className="star">
+                              <i className="fa fa-star" aria-hidden="true" />
+                              <i className="fa fa-star" aria-hidden="true" />
+                              <i className="fa fa-star" aria-hidden="true" />
+                              <i className="fa fa-star" aria-hidden="true" />
+                              <i className="fa fa-star-o" aria-hidden="true" />
+                            </span>
+                          </li>
+                          <li>
+                            <span>Available:</span>
+                            <span className="large">
+                              {detail.Quantity !== 0 ? "YES" : "SOLD OUT"}
+                            </span>
+                          </li>
+                          <li>
+                            <span>color:</span>
+                            <span className="color">
+                              <span
+                                className="active"
+                                style={{
+                                  backgroundColor: "#28252c",
+                                  outlineColor: "#28252c",
+                                }}
+                              />
+                              <span
+                                style={{
+                                  backgroundColor: "#d2cbc6",
+                                  outlineColor: "#d2cbc6",
+                                }}
+                              />
+                              <span
+                                style={{
+                                  backgroundColor: "#4e77ab",
+                                  outlineColor: "#4e77ab",
+                                }}
+                              />
+                              <span
+                                style={{
+                                  backgroundColor: "#c48d8d",
+                                  outlineColor: "#c48d8d",
+                                }}
+                              />
+                            </span>
+                          </li>
+                        </ul>
+                        <p>{detail.shortDesc}</p>
+                      </article>
+                      <div className="btn-wrap">
                         <a
-                          className="item"
-                          href="https://www.instagram.com/"
-                          target="_blank"
+                          href="#"
+                          className="btn-2"
+                          onClick={(e) => addToCart(detail, e)}
                         >
-                          <i className="fa fa-instagram" />
+                          <span>add to cart</span>
                         </a>
-                        <a
-                          className="item"
-                          href="https://www.facebook.com/"
-                          target="_blank"
-                        >
-                          <i className="fa fa-facebook" />
+                      </div>
+                      <div className="btn-wrap">
+                        <a href="#" className="btn-1 border">
+                          <span>add to favourites</span>
                         </a>
-                        <a
-                          className="item"
-                          href="https://www.pinterest.com/"
-                          target="_blank"
-                        >
-                          <i className="fa fa-pinterest-p" />
-                        </a>
-                        <a
-                          className="item"
-                          href="https://twitter.com/"
-                          target="_blank"
-                        >
-                          <i className="fa fa-twitter" />
-                        </a>
-                        <a
-                          className="item"
-                          href="https://plus.google.com/"
-                          target="_blank"
-                        >
-                          <i className="fa fa-google-plus" />
-                        </a>
+                      </div>
+                      <div className="follow-wrapper">
+                        <span>share:</span>
+                        <div className="follow">
+                          <a
+                            className="item"
+                            href="https://www.instagram.com/"
+                            target="_blank"
+                          >
+                            <i className="fa fa-instagram" />
+                          </a>
+                          <a
+                            className="item"
+                            href="https://www.facebook.com/"
+                            target="_blank"
+                          >
+                            <i className="fa fa-facebook" />
+                          </a>
+                          <a
+                            className="item"
+                            href="https://www.pinterest.com/"
+                            target="_blank"
+                          >
+                            <i className="fa fa-pinterest-p" />
+                          </a>
+                          <a
+                            className="item"
+                            href="https://twitter.com/"
+                            target="_blank"
+                          >
+                            <i className="fa fa-twitter" />
+                          </a>
+                          <a
+                            className="item"
+                            href="https://plus.google.com/"
+                            target="_blank"
+                          >
+                            <i className="fa fa-google-plus" />
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
               <div className="empty-space h60-xs" />
               <div className="row">
@@ -196,9 +192,7 @@ const Detail = () => {
                     <div className="tab-menu">Testimonials</div>
                     <div className="tab-entry" style={{ display: "block" }}>
                       <div className="article">
-                        <p>
-                         {detail && detail.longDesc}
-                        </p>
+                        <p>{detail && detail.longDesc}</p>
                         <ul className="disc">
                           <li>
                             aute irure dolor in reprehenderit in voluptate velit
@@ -333,26 +327,28 @@ const Detail = () => {
                   <h2 className="h2">You may also like</h2>
                   <div className="empty-space h30-xs" />
                 </div>
-                {
-                  relatedItems && relatedItems.map((element,i)=> (
+                {relatedItems &&
+                  relatedItems.map((element, i) => (
                     <div className="col-sm-3">
-                    <Link to={`/shop/${element.ID}`} className="related img-hover-2">
-                      <img src={element.Image}alt="" className="img" />
-                    </Link>
-                    <article>
-                      <div className="empty-space h15-xs" />
-                      <a href="#">
-                        <h6 className="h6 hover-1">{element.DisplayName}</h6>
-                      </a>
-                      <div className="empty-space h10-xs" />
-                      <span className="price price-sm">
-                        {element.Price} $
-                      </span>
-                      <div className="empty-space h30-xs h0-sm" />
-                    </article>
-                  </div>
-                  ))
-                }
+                      <Link
+                        to={`/shop/${element.ID}`}
+                        className="related img-hover-2"
+                      >
+                        <img src={element.Image} alt="" className="img" />
+                      </Link>
+                      <article>
+                        <div className="empty-space h15-xs" />
+                        <a href="#">
+                          <h6 className="h6 hover-1">{element.DisplayName}</h6>
+                        </a>
+                        <div className="empty-space h10-xs" />
+                        <span className="price price-sm">
+                          {element.Price} $
+                        </span>
+                        <div className="empty-space h30-xs h0-sm" />
+                      </article>
+                    </div>
+                  ))}
               </div>
             </div>
           </div>

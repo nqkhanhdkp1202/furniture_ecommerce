@@ -2,22 +2,8 @@ import React, { useEffect, useState } from "react";
 import { furnitureAPI } from "../../api/furnitureAPI";
 import Checkbox from "./checkbox/CheckBox";
 
-const Sidebar = () => {
-  const [categories, setCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+const Sidebar = ({categories}) => {
   const [isChecked, setIsChecked] = useState([]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const getCategoryList = async () => {
-      const params = {};
-      let response = null;
-      response = await furnitureAPI.getCategoryList(params);
-      setCategories(response.data);
-    };
-    getCategoryList();
-    setIsLoading(false);
-  }, []);
 
   const handleChecked = (event) => {
     const value = event.target.value;

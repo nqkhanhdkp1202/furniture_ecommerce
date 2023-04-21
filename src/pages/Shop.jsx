@@ -1,6 +1,10 @@
+
 import { array } from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
 import { furnitureAPI } from "../api/furnitureAPI";
+import React, { useEffect, useState } from "react";
+import { furnitureAPI } from "../api/furnitureAPI";
+import Loader from "../components/loader/Loader";
 import ProductList from "../components/product-list/ProductList";
 import SearchModal from "../components/search-modal/SearchModal";
 import Sidebar from "../components/sidebar/Sidebar";

@@ -20,7 +20,9 @@ const Checkout = () => {
   const { user } = useContext(UserContext);
   const [shipment, setShipment] = useState([]);
   const [payment, setPayment] = useState([]);
-
+  const [isDisable, setIsDisable] = useState(true);
+  const [shippingInfo, setShippingInfo] = useState({})
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSwitchPayment = () => {
     setTabEntry(true);
@@ -29,6 +31,14 @@ const Checkout = () => {
   const handleSwitchDeli = () => {
     setTabEntry(false);
   };
+
+  const handleEditInfo = () => {
+    setIsDisable(false);
+  }
+
+  const handleSaveInfo = () => {
+    setIsDisable(true);
+  }
 
   useEffect(() => {
     const getShipmentList = async () => {
@@ -59,8 +69,6 @@ const Checkout = () => {
     };
     getPaymentList();
   }, []);
-
-  console.log(payment);
 
   return (
     <>
@@ -96,7 +104,6 @@ const Checkout = () => {
                   </div>
                   <div
                     className={`tab-menu ${tabEntry && "active"}`}
-                    onClick={handleSwitchPayment}
                   >
                     02 Payment
                   </div>
@@ -106,89 +113,81 @@ const Checkout = () => {
                     style={{ display: `${!tabEntry ? "block" : "none"} ` }}
                   >
                     <form>
+                      <div className="heading-shipping">
                       <h4 className="h4">Shipping info</h4>
+                      {
+                        isDisable ? (
+                          <span className="edit-btn" onClick={() => handleEditInfo()}>
+                          <a>Edit</a>
+                        </span>
+                        ) : (
+                          <span className="edit-btn" onClick={() => handleSaveInfo()}>
+                          <a>Save Info</a>
+                        </span>
+                        )
+                      }
+                      </div>
                       <div className="empty-space h25-xs h30-md" />
                       <div className="input-wrapper">
                         <div className="input-style half">
                           <input
-                            id="inputFirstName"
+                            id="inputFullName"
                             name="name"
                             type="text"
                             className="input"
-                            required=""
+                            required
+                            placeholder="Full Name"
+                            disabled={isDisable}
+                            defaultValue={user.DisplayName}
                           />
-                          <label htmlFor="inputFirstName">First Name</label>
                         </div>
                         <div className="input-style half half-right">
-                          <input
-                            id="inputLastName"
-                            name="name"
-                            type="text"
-                            className="input"
-                            required=""
-                          />
-                          <label htmlFor="inputLastName">Last Name</label>
-                        </div>
-                        <div className="input-style half">
                           <input
                             id="inputEmail"
                             name="email"
+                            type="email"
+                            className="input"
+                            required
+                            placeholder="Email"
+                            disabled={isDisable}
+                            defaultValue={user.Email || "Empty"}
+                          />
+                        </div>
+                        <div className="input-style half">
+                          <input
+                            id="inputPhone"
+                            name="phone"
                             type="text"
                             className="input"
-                            required=""
+                            required
+                            placeholder="Phone"
+                            defaultValue={user.Phone || "Empty"}
+                            disabled={isDisable}
                           />
-                          <label htmlFor="inputEmail">E-mail</label>
                         </div>
                         <div className="input-style half half-right">
                           <input
-                            id="inputPhoneNumber"
-                            name="phonenumber"
+                            id="inputMoreInfo"
+                            name="moreinfo"
                             type="text"
                             className="input"
-                            required=""
+                            required
+                            placeholder="More Info"
+                            disabled={isDisable}
+                            defaultValue={user.MoreInfo || "Empty"}
                           />
-                          <label htmlFor="inputPhoneNumber">Phone Number</label>
                         </div>
-                        <div className="input-style third">
-                          <input
-                            id="inputZipCode"
-                            name="zipcode"
-                            type="text"
-                            className="input"
-                            required=""
-                          />
-                          <label htmlFor="inputZipCode">ZIP Code</label>
-                        </div>
-                        <select
-                          name="country"
-                          className="select-box third third-right"
-                        >
-                          <option disabled="" selected="">
-                            Country
-                          </option>
-                          <option value="country1">Country1</option>
-                          <option value="country2">Country2</option>
-                          <option value="country3">Country3</option>
-                          <option value="country4">Country4</option>
-                        </select>
-                        <select name="city" className="select-box">
-                          <option disabled="" selected="">
-                            City
-                          </option>
-                          <option value="city1">City1</option>
-                          <option value="city2">City2</option>
-                          <option value="city3">City3</option>
-                          <option value="city4">City4</option>
-                        </select>
                         <div className="input-style">
                           <input
                             id="inputAddress"
                             name="address"
                             type="text"
                             className="input"
-                            required=""
+                            required
+                            placeholder="Address"
+                            disabled={isDisable}
+                            defaultValue={user.Address || "Empty"}
                           />
-                          <label htmlFor="inputAddress">Address</label>
                         </div>
                       </div>
                       <div className="empty-space h15-xs h30-md" />

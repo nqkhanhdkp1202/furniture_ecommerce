@@ -5,6 +5,7 @@ import Checkbox from "./checkbox/CheckBox";
 const Sidebar = ({ list, handleChangeDataWithFilter }) => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   const [isChecked, setIsChecked] = useState([]);
   const idTimeOut = useRef(null)
 
@@ -19,7 +20,7 @@ const Sidebar = ({ list, handleChangeDataWithFilter }) => {
     getCategoryList();
     // setIsLoading(false);
   }, []);
-
+  
   const handleChecked = (event) => {
     const value = event.target.value;
     let lstCategory = []
@@ -39,12 +40,6 @@ const Sidebar = ({ list, handleChangeDataWithFilter }) => {
     setIsChecked(lstCategory)
   };
 
-  // useEffect(() => {
-
-  // }, [isChecked])
-
-  // console.log(isChecked)
-  // console.log(list)
 
   return (
     <>

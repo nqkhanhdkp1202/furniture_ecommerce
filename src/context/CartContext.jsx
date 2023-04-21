@@ -13,18 +13,18 @@ export const CartProvider = ({ children }) => {
     }
   }, []);
 
-  const addToCart = (product,e) => {
+  const addToCart = (product,e, addQuantity = 1) => {
     e.preventDefault();
     const existingCartItem = cartItems.find((item) => item.ID === product.ID);
     if (existingCartItem) {
       const updatedItems = cartItems.map((item) =>
       item.ID === product.ID
-        ? { ...item, quantity: item.quantity + 1 }
+        ? { ...item, quantity: item.quantity + addQuantity }
         : item)
       setCartItems(updatedItems);
       localStorage.setItem('cartItems', JSON.stringify(updatedItems));
     } else {
-      const newItems = [...cartItems, { ...product, quantity: 1 }];
+      const newItems = [...cartItems, { ...product, quantity: addQuantity }];
       setCartItems(newItems);
       localStorage.setItem('cartItems', JSON.stringify(newItems));
     }

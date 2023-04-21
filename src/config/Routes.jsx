@@ -6,6 +6,8 @@ import Checkout from '../pages/Checkout';
 import Contact from '../pages/Contact';
 import Detail from '../pages/Detail';
 import Home from '../pages/Home';
+import Orders from '../pages/Orders';
+import Profile from '../pages/Profile';
 import Shop from '../pages/Shop'
 
 const router = [
@@ -35,6 +37,14 @@ const router = [
             {
                 path: '/contact',
                 element: <Contact/>
+            },
+            {
+                path: '/profile',
+                element: <Profile/>
+            },
+            {
+                path: '/orders',
+                element: <Orders/>
             },
         ]
     }

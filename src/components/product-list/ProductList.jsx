@@ -45,7 +45,6 @@ const ProductList = ({ list }) => {
         }
     }, [searchTerm])
 
-
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
@@ -61,12 +60,9 @@ const ProductList = ({ list }) => {
     const handleSearch = event => {
         setSearchTerm(event.target.value);
     };
-
     return (
         <>
-            {
-                isLoading && <Loader />
-            }
+           
             <SearchModal onSubmit={handleSearch} searchTerm={searchTerm} />
             <div className="empty-space h30-xs" />
             <div className="col-md-9 col-sm-9 pd-x-2">
